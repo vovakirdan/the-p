@@ -14,10 +14,10 @@ class Color:
         yield self.g
         yield self.b
 
-BROWN = Color(139, 69, 19)
-SKY = Color(206, 50, 100)
+BROWN = Color(162, 101, 62)
+SKY = Color(127, 199, 255)
 PLAYER_COLOR = Color(0, 128, 255)
-GRASS = Color(96, 70, 63)
+GRASS = Color(56, 128, 4)
 
 class Screen:
     def __init__(self, width: int = 0, height: int = 0, caption: str = ''):
