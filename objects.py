@@ -1,14 +1,14 @@
 import pygame
 
-from configuration import Configuration
+from configuration import Configuration, Color
 
 configuration = Configuration()
 
 class Block(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int, block_size: int):
+    def __init__(self, x: int, y: int, color: Color):
         super().__init__()
-        self.image = pygame.Surface((block_size, block_size))
-        self.image.fill(configuration.block.color)  # Blue color
+        self.image = pygame.Surface(configuration.block.size)
+        self.image.fill(color)
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
 
@@ -16,7 +16,7 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, x: int, y: int):
         super().__init__()
         # Create a simple rectangle as the player's image
-        self.image = pygame.Surface((50, 50))
+        self.image = pygame.Surface(configuration.player.size)
         self.image.fill(configuration.player.color)  # Blue color
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)

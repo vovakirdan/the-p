@@ -17,6 +17,7 @@ class Color:
 BROWN = Color(139, 69, 19)
 SKY = Color(206, 50, 100)
 PLAYER_COLOR = Color(0, 128, 255)
+GRASS = Color(96, 70, 63)
 
 class Screen:
     def __init__(self, width: int = 0, height: int = 0, caption: str = ''):
@@ -31,8 +32,14 @@ class Screen:
         yield self.height
 
 class PlayerSettings:
-    def __init__(self):
+    def __init__(self, size: int | tuple[int, int] = 20):
         self.color = tuple(PLAYER_COLOR)  # blue color
+        if isinstance(size, int):
+            self.size = (size, size * 2)
+        else:
+            self.size = size
+        self.width = self.size[0]
+        self.height = self.size[1]
         self.speed = 5
         self.jump_strength = 15
         self.gravity = .5
@@ -48,17 +55,30 @@ class PlayerSettings:
         self.start_position_x, self.start_position_y = position
 
 class Block:
-    def __init__(self, x: int, y: int):
+    def __init__(self, size: int | tuple[int, int] = 20, x: int = 0, y: int = 0):
+        if isinstance(size, int):
+            self.size = (size, size)
+        else:
+            self.size = size
         self.x = x
         self.y = y
         self.color = tuple(BROWN)
+        self.underground_color = tuple(BROWN)
+        self.surface_color = tuple(GRASS)
+
+class World:
+    def __init__(self):
+        self.width = 8000
+        self.height = 4000
 
 class Configuration:
+    BLOCK_COEFFICIENT = 20
     def __init__(self):
         self.screen = Screen(800, 600, 'P')
-        self.player = PlayerSettings()
+        self.player = PlayerSettings(self.BLOCK_COEFFICIENT)
         self.player.start_position = (self.screen.width // 2, self.screen.height // 2)
-        self.block = Block(50, 50)
+        self.block = Block(self.BLOCK_COEFFICIENT)
+        self.world = World()
 
 if __name__ == '__main__':
     screen = Screen(width=1024, height=768, caption='My Game')
