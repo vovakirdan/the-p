@@ -1,7 +1,7 @@
 import pygame
 import random
 
-from objects import Block
+from objects import Earth, Grass, Rock, Mud
 from configuration import Configuration
 
 def generate_world(configuration: Configuration, seed=None):
@@ -34,32 +34,38 @@ def generate_world(configuration: Configuration, seed=None):
     for y in range(blocks_y):
         row = []
         for x in range(blocks_x):
+            rand = random.randint(0, 100)
             if y > ground_level + random.randint(-1, 1):
-                row.append(1)  # Underground block (brown)
-            elif y == ground_level + random.randint(-1, 1):
-                row.append(2)  # Surface block (green)
+                if rand < 5:
+                    row.append('rock')
+                elif rand < 10:
+                    row.append('mud')
+                else:
+                    row.append('earth')
+            elif y == ground_level:
+                row.append('grass')
             else:
-                row.append(0)  # Empty space
+                row.append(None)
         world_data.append(row)
 
     # Create block sprites based on the world data
     block_list = pygame.sprite.Group()
 
     for y, row in enumerate(world_data):
-        for x, tile in enumerate(row):
-            if tile == 1:
-                block = Block(
-                    x * block_width,
-                    y * block_height,
-                    configuration.block.underground_color,
-                )
-                block_list.add(block)
-            elif tile == 2:
-                block = Block(
-                    x * block_width,
-                    y * block_height,
-                    configuration.block.surface_color,
-                )
+        for x, tile_type in enumerate(row):
+            block = None
+            x_pos = x * block_size
+            y_pos = y * block_size
+
+            if tile_type == 'earth':
+                block = Earth(x_pos, y_pos)
+            elif tile_type == 'grass':
+                block = Grass(x_pos, y_pos)
+            elif tile_type == 'rock':
+                block = Rock(x_pos, y_pos)
+            elif tile_type == 'mud':
+                block = Mud(x_pos, y_pos)
+            if block:
                 block_list.add(block)
 
     # Place the player at the center of the world, above ground level

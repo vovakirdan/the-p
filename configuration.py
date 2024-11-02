@@ -18,6 +18,7 @@ BROWN = Color(162, 101, 62)
 SKY = Color(127, 199, 255)
 PLAYER_COLOR = Color(0, 128, 255)
 GRASS = Color(56, 128, 4)
+WHITE = Color(255, 255, 255)
 
 class Screen:
     def __init__(self, width: int = 0, height: int = 0, caption: str = ''):
@@ -62,9 +63,7 @@ class Block:
             self.size = size
         self.x = x
         self.y = y
-        self.color = tuple(BROWN)
-        self.underground_color = tuple(BROWN)
-        self.surface_color = tuple(GRASS)
+        self.default_color = tuple(WHITE)
 
 class World:
     def __init__(self):

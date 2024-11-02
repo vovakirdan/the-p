@@ -1,16 +1,61 @@
 import pygame
+import random
 
 from configuration import Configuration, Color
 
 configuration = Configuration()
 
 class Block(pygame.sprite.Sprite):
-    def __init__(self, x: int, y: int, color: Color):
+    def __init__(self, x: int, y: int):
         super().__init__()
-        self.image = pygame.Surface(configuration.block.size)
-        self.image.fill(color)
+        self.size = configuration.block.size
+        self.image = pygame.Surface(self.size)
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
+        self.create_texture()
+
+    def create_texture(self):
+        self.image.fill(configuration.block.default_color)
+
+class Grass(Block):
+    def create_texture(self):
+        # create a grass texture with randomly colored pixels
+        for x in range(self.size[0]):
+            for y in range(self.size[1]):
+                green_shade = random.randint(0, 255)
+                self.image.set_at((x, y), (0, green_shade, 0))
+
+class Earth(Block):
+    def create_texture(self):
+        # create an earth texture with random brown shades
+        for x in range(self.size[0]):
+            for y in range(self.size[1]):
+                brown_shade = random.randint(80, 120)
+                self.image.set_at((x, y), (brown_shade, 42, 42))
+
+class Water(Block):
+    def create_texture(self):
+        # create a water texture with random blue shades
+        for x in range(self.size[0]):
+            for y in range(self.size[1]):
+                blue_shade = random.randint(100, 200)
+                self.image.set_at((x, y), (0, 0, blue_shade))
+
+class Rock(Block):
+    def create_texture(self):
+        # create a rock texture with random grey shades
+        for x in range(self.size[0]):
+            for y in range(self.size[1]):
+                grey_shade = random.randint(100, 150)
+                self.image.set_at((x, y), (grey_shade, grey_shade, grey_shade))
+
+class Mud(Block):
+    def create_texture(self):
+        # create a mud texture with random brown shades
+        for x in range(self.size[0]):
+            for y in range(self.size[1]):
+                brown_shade = random.randint(60, 80)
+                self.image.set_at((x, y), (brown_shade, 30, 30))
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x: int, y: int):
