@@ -46,9 +46,12 @@ while running:
     # Update player with collision detection
     player.update(block_list)
 
+    desired_player_screen_y = configuration.screen.height * (2/3)
+    # desired_player_screen_x = configuration.screen.width * 2 // 3
+
     # Camera logic to follow the player
     camera_x = player.rect.centerx - configuration.screen.width // 2
-    camera_y = player.rect.centery - configuration.screen.height // 2
+    camera_y = player.rect.centery - desired_player_screen_y
 
     # Limit the camera to the world boundaries
     max_camera_x = configuration.world.width - configuration.screen.width
