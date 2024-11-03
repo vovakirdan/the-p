@@ -1,7 +1,7 @@
 import pygame
 import random
 
-from objects import Earth, Grass, Rock, Mud
+from objects import Earth, Grass, Rock, Mud, Gold
 from configuration import Configuration
 
 def generate_world(configuration: Configuration, seed=None):
@@ -38,8 +38,10 @@ def generate_world(configuration: Configuration, seed=None):
             if y > ground_level + random.randint(-1, 1):
                 if rand < 5:
                     row.append('rock')
-                elif rand < 10:
+                elif rand < 7:
                     row.append('mud')
+                elif rand < 10:
+                    row.append('gold')
                 else:
                     row.append('earth')
             elif y == ground_level:
@@ -65,6 +67,8 @@ def generate_world(configuration: Configuration, seed=None):
                 block = Rock(x_pos, y_pos)
             elif tile_type == 'mud':
                 block = Mud(x_pos, y_pos)
+            elif tile_type == 'gold':
+                block = Gold(x_pos, y_pos)
             if block:
                 block_list.add(block)
 

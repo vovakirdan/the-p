@@ -57,6 +57,10 @@ class Mud(Block):
                 brown_shade = random.randint(60, 80)
                 self.image.set_at((x, y), (brown_shade, 30, 30))
 
+class Gold(Block):
+    def create_texture(self):
+        self.image.fill((255, 215, 0))
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, x: int, y: int):
         super().__init__()

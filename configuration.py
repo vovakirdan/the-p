@@ -43,7 +43,7 @@ class PlayerSettings:
         self.width = self.size[0]
         self.height = self.size[1]
         self.speed = 5
-        self.jump_strength = 15
+        self.jump_strength = 10
         self.gravity = .5
         self.start_position_x = 0
         self.start_position_y = 0

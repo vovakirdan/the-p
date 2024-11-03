@@ -1,3 +1,5 @@
 .env
 tir/
 __pycache__/
+venv/
+.idea/
