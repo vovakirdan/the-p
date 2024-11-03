@@ -1,4 +1,5 @@
 import random
+from typing import Tuple, Union
 
 class Color:
     def __init__(self, r: int = 255, g: int = 255, b: int = 255):
@@ -33,7 +34,7 @@ class Screen:
         yield self.height
 
 class PlayerSettings:
-    def __init__(self, size: int | tuple[int, int] = 20):
+    def __init__(self, size: Union[int, Tuple[int, int]] = 20):
         self.color = tuple(PLAYER_COLOR)  # blue color
         if isinstance(size, int):
             self.size = (size, size * 2)
@@ -48,15 +49,15 @@ class PlayerSettings:
         self.start_position_y = 0
 
     @property
-    def start_position(self) -> tuple[int, int]:
+    def start_position(self) -> Tuple[int, int]:
         return self.start_position_x, self.start_position_y
     
     @start_position.setter
-    def start_position(self, position: tuple[int, int]):
+    def start_position(self, position: Tuple[int, int]):
         self.start_position_x, self.start_position_y = position
 
 class Block:
-    def __init__(self, size: int | tuple[int, int] = 20, x: int = 0, y: int = 0):
+    def __init__(self, size: Union[int, Tuple[int, int]] = 20, x: int = 0, y: int = 0):
         if isinstance(size, int):
             self.size = (size, size)
         else:
