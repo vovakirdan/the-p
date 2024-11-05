@@ -2,10 +2,8 @@ import pygame
 import random
 from typing import AnyStr, Tuple
 
-from configuration import Configuration, Color
+from configuration import configuration
 from shades import brown_shades
-
-configuration = Configuration()
 
 BLOCK_SIZE = configuration.block.size
 

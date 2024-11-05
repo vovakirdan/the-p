@@ -1,11 +1,16 @@
 import pygame
 import random
+from typing import Literal, Tuple
 
 from objects import Block, textures_dict, generate_grass_type_3
-from configuration import Configuration
+from configuration import configuration
 
-def generate_world(configuration: Configuration, seed=None):
+def generate_biome(type_: Literal['default', 'ocean', 'forest'] = 'default', biom_size: Tuple[int, int] = configuration.world.size):
+    """Generates biome"""
+    pass
 
+def generate_world(seed=None):
+    """Generates world"""
     # Set seed
     if seed is None:
         seed = random.randint(0, 1000000)
@@ -60,9 +65,9 @@ def generate_world(configuration: Configuration, seed=None):
             y_pos = y * block_size
 
             if tile_type == 'earth':
-                block = Block(x_pos, y_pos, texture=textures_dict['earth']['type_1'])
+                block = Block(x_pos, y_pos, type_=tile_type, texture=textures_dict['earth']['type_1'])
             elif tile_type == 'grass':
-                block = Block(x_pos, y_pos, collide=False, texture=generate_grass_type_3())
+                block = Block(x_pos, y_pos, collide=False, type_=tile_type, texture=generate_grass_type_3())
             # elif tile_type == 'rock':
             #     block = Rock(x_pos, y_pos)
             # elif tile_type == 'mud':

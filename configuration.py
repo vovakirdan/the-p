@@ -70,6 +70,7 @@ class World:
     def __init__(self):
         self.width = 8000
         self.height = 4000
+        self.size = (self.width, self.height)
 
 class Configuration:
     BLOCK_COEFFICIENT = 20
@@ -79,6 +80,8 @@ class Configuration:
         self.player.start_position = (self.screen.width // 2, self.screen.height // 2)
         self.block = Block(self.BLOCK_COEFFICIENT)
         self.world = World()
+
+configuration = Configuration()
 
 if __name__ == '__main__':
     screen = Screen(width=1024, height=768, caption='My Game')

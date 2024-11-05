@@ -1,9 +1,7 @@
 import pygame
-from configuration import Configuration
-from objects import Player, Block
+from configuration import configuration
+from objects import Player
 from functional import generate_world
-
-configuration = Configuration()
 
 pygame.init()
 
@@ -14,7 +12,7 @@ pygame.display.set_caption(configuration.screen.caption)
 clock = pygame.time.Clock()
 
 # World generation
-block_list, world_data, seed = generate_world(configuration=configuration)
+block_list, world_data, seed = generate_world()
 print(f"Seed: {seed}")
 
 # Now create the player at the correct position
