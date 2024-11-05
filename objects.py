@@ -12,6 +12,7 @@ class Block(pygame.sprite.Sprite):
         self.image = pygame.Surface(self.size)
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
+        self.collide: bool = True
         self.create_texture()
 
     def create_texture(self):
@@ -78,27 +79,32 @@ class Player(pygame.sprite.Sprite):
         
         # Placeholder for object in hand
         self.object_in_hand = None
-
         self.on_ground = False
 
-    def update(self, tiles):
+    def update(self, tiles: pygame.sprite.Group):
         # Apply gravity
         self.velocity.y += self.gravity
-        
-        # Update position
+
+        # Horizontal movement
         self.rect.x += self.velocity.x
         self.collide(self.velocity.x, 0, tiles)
+        
+        # Vertical movement
         self.rect.y += self.velocity.y
         self.collide(0, self.velocity.y, tiles)
         
-        # Prevent player from falling below the ground
-        # if self.rect.bottom >= 500:  # Assuming ground level is at y = 500
-        #     self.rect.bottom = 500
-        #     self.velocity.y = 0
+        # Prevent player from going beyond world boundaries
+        self.rect.left = max(self.rect.left, 0)
+        self.rect.right = min(self.rect.right, configuration.world.width)
+        self.rect.top = max(self.rect.top, 0)
+        self.rect.bottom = min(self.rect.bottom, configuration.world.height)
 
-    def collide(self, xvel, yvel, tiles):
+    def collide(self, xvel: int, yvel: int, tiles: pygame.sprite.Group):
         collisions = pygame.sprite.spritecollide(self, tiles, False)
         for tile in collisions:
+            if not isinstance(tile, Block) or not tile.collide:
+                continue  # Skip non-collidable blocks
+
             if xvel > 0:  # moving right
                 self.rect.right = tile.rect.left
             if xvel < 0:  # moving left
@@ -110,6 +116,7 @@ class Player(pygame.sprite.Sprite):
             if yvel < 0:  # jumping
                 self.rect.top = tile.rect.bottom
                 self.velocity.y = 0
+
         if not collisions:
             self.on_ground = False
 
@@ -123,9 +130,6 @@ class Player(pygame.sprite.Sprite):
         self.velocity.x = 0
 
     def jump(self):
-        # Allow jumping if the player is on the ground
-        # if self.rect.bottom >= 500:
-        #     self.velocity.y = self.jump_strength
         if self.on_ground:
             self.velocity.y = self.jump_strength
             self.on_ground = False
