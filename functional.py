@@ -1,7 +1,7 @@
 import pygame
 import random
 
-from objects import Earth, Grass, Rock, Mud, Gold
+from objects import Block, textures_dict # Earth, Grass, Rock, Mud, Gold
 from configuration import Configuration
 
 def generate_world(configuration: Configuration, seed=None):
@@ -60,15 +60,15 @@ def generate_world(configuration: Configuration, seed=None):
             y_pos = y * block_size
 
             if tile_type == 'earth':
-                block = Earth(x_pos, y_pos)
+                block = Block(x_pos, y_pos, texture=textures_dict['earth']['type_1'])
             elif tile_type == 'grass':
-                block = Grass(x_pos, y_pos, type_='type_1')
-            elif tile_type == 'rock':
-                block = Rock(x_pos, y_pos)
-            elif tile_type == 'mud':
-                block = Mud(x_pos, y_pos)
-            elif tile_type == 'gold':
-                block = Gold(x_pos, y_pos)
+                block = Block(x_pos, y_pos, texture=textures_dict['grass']['type_1'])
+            # elif tile_type == 'rock':
+            #     block = Rock(x_pos, y_pos)
+            # elif tile_type == 'mud':
+            #     block = Mud(x_pos, y_pos)
+            # elif tile_type == 'gold':
+                # block = Gold(x_pos, y_pos)
             if block:
                 block_list.add(block)
 

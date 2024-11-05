@@ -1,70 +1,64 @@
 import pygame
 import random
-from typing import AnyStr
+from typing import AnyStr, Tuple
 
 from configuration import Configuration, Color
 
 configuration = Configuration()
 
+BLOCK_SIZE = configuration.block.size
+
 class Block(pygame.sprite.Sprite):
-    def __init__(self, x: int = None, y: int = None, collide: bool = True, type_: AnyStr = ''):
+    def __init__(self, x: int = None, y: int = None, collide: bool = True, type_: AnyStr = '', texture: pygame.Surface = None):
         super().__init__()
         self.size = configuration.block.size
-        self.image = pygame.Surface(self.size)
+        if texture:
+            self.image = texture
+        else:
+            self.image = pygame.Surface(self.size)
         self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
         self.collide: bool = collide
         self.type_: AnyStr = type_
-        self.textures = {}
-        self.create_texture()
-        if all((x is not None, y is not None)):
-            self.set_top_left(x, y)
 
-    def create_texture(self):
-        self.image.fill(configuration.block.default_color)
+    @property
+    def texture(self) -> pygame.Surface:
+        return self._texture
 
-    def set_top_left(self, x: int, y: int):
-        self.rect.topleft = (x, y)
-
-class Grass(Block):
-    @staticmethod
-    def _create_texture_type_1(surface: pygame.Surface):
-        delim = surface.get_height() // 4
-        for x in range(surface.get_width()):
-            for y in range(surface.get_height()):
-                if y <= delim:
-                    green_shade = random.randint(80, 120)
-                    surface.set_at((x, y), (0, green_shade, 0))
-                else:
-                    brown_shade = random.randint(80, 120)
-                    surface.set_at((x, y), (brown_shade, 42, 42))
-
-    @staticmethod
-    def _create_texture_type_2(surface: pygame.Surface):
-        for x in range(surface.get_width()):
-            for y in range(surface.get_height()):
-                green_shade = random.randint(100, 200)
+def generate_grass_type_1() -> pygame.Surface:
+    surface = pygame.Surface(BLOCK_SIZE)
+    delim = surface.get_height() // 4
+    for x in range(surface.get_width()):
+        for y in range(surface.get_height()):
+            if y <= delim:
+                green_shade = random.randint(80, 120)
                 surface.set_at((x, y), (0, green_shade, 0))
-
-    def create_texture(self):
-        texture = pygame.Surface(configuration.block.size)
-        if self.type_ == 'type_1':
-            self._create_texture_type_1(texture)
-        elif self.type_ == 'type_2':
-            self._create_texture_type_2(texture)
-        else:  # default random grass texture with randomly colored pixels
-            for x in range(self.size[0]):
-                for y in range(self.size[1]):
-                    green_shade = random.randint(0, 255)
-                    texture.set_at((x, y), (0, green_shade, 0))
-        self.image = texture.copy()  # why copy??
-
-class Earth(Block):
-    def create_texture(self):
-        # create an earth texture with random brown shades
-        for x in range(self.size[0]):
-            for y in range(self.size[1]):
+            else:
                 brown_shade = random.randint(80, 120)
-                self.image.set_at((x, y), (brown_shade, 42, 42))
+                surface.set_at((x, y), (brown_shade, 42, 42))
+    return surface
+
+def generate_grass_type_2() -> pygame.Surface:
+    surface = pygame.Surface(BLOCK_SIZE)
+    for x in range(surface.get_width()):
+        for y in range(surface.get_height()):
+            green_shade = random.randint(100, 200)
+            surface.set_at((x, y), (0, green_shade, 0))
+    return surface
+
+grass_type_1 = generate_grass_type_1()
+grass_type_2 = generate_grass_type_2()
+
+def generate_earth_type_1() -> pygame.Surface:
+    surface = pygame.Surface(BLOCK_SIZE)
+    # create an earth texture with random brown shades
+    for x in range(surface.get_width()):
+        for y in range(surface.get_height()):
+            brown_shade = random.randint(80, 120)
+            surface.set_at((x, y), (brown_shade, 42, 42))
+    return surface
+
+earth_type_1 = generate_earth_type_1()
 
 class Water(Block):
     def create_texture(self):
@@ -93,6 +87,15 @@ class Mud(Block):
 class Gold(Block):
     def create_texture(self):
         self.image.fill((255, 215, 0))
+
+textures_dict = {
+    'grass': {'type_1': grass_type_1, 'type_2': grass_type_2},
+    'earth': {'type_1': earth_type_1},
+    'water': {'type_1': Water},
+    'rock': {'type_1': Rock},
+    'mud': {'type_1': Mud},
+    'gold': {'type_1': Gold}
+}
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, x: int, y: int):
