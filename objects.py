@@ -3,6 +3,7 @@ import random
 from typing import AnyStr, Tuple
 
 from configuration import Configuration, Color
+from shades import brown_shades
 
 configuration = Configuration()
 
@@ -51,10 +52,10 @@ grass_type_2 = generate_grass_type_2()
 
 def generate_earth_type_1() -> pygame.Surface:
     surface = pygame.Surface(BLOCK_SIZE)
-    # create an earth texture with random brown shades
+    # create an earth texture with brown shades depends on x and y
     for x in range(surface.get_width()):
         for y in range(surface.get_height()):
-            brown_shade = random.randint(80, 120)
+            brown_shade = brown_shades[x][y]
             surface.set_at((x, y), (brown_shade, 42, 42))
     return surface
 
