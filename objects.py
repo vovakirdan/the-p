@@ -7,35 +7,23 @@ from configuration import Configuration, Color
 configuration = Configuration()
 
 class Block(pygame.sprite.Sprite):
-    def __init__(self, x: int = 0, y: int = 0, collide: bool = True, type_: AnyStr = ''):
+    def __init__(self, x: int = None, y: int = None, collide: bool = True, type_: AnyStr = ''):
         super().__init__()
         self.size = configuration.block.size
         self.image = pygame.Surface(self.size)
         self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
         self.collide: bool = collide
         self.type_: AnyStr = type_
         self.textures = {}
         self.create_texture()
+        if all((x is not None, y is not None)):
+            self.set_top_left(x, y)
 
     def create_texture(self):
         self.image.fill(configuration.block.default_color)
 
-    @property
-    def x(self) -> int:
-        return self.rect.x
-    
-    @x.setter
-    def x(self, value: int):
-        self.rect.topleft = (value, self.y)
-
-    @property
-    def y(self) -> int:
-        return self.rect.y
-
-    @y.setter
-    def y(self, value: int):
-        self.rect.topleft = (self.x, value)
+    def set_top_left(self, x: int, y: int):
+        self.rect.topleft = (x, y)
 
 class Grass(Block):
     @staticmethod
@@ -58,15 +46,11 @@ class Grass(Block):
                 surface.set_at((x, y), (0, green_shade, 0))
 
     def create_texture(self):
-        self.textures |= {
-            'type_1': self._create_texture_type_1(pygame.Surface(configuration.block.size)),
-            'type_2': self._create_texture_type_2(pygame.Surface(configuration.block.size))
-        }
         texture = pygame.Surface(configuration.block.size)
         if self.type_ == 'type_1':
-            texture = self.textures['type_1']
+            self._create_texture_type_1(texture)
         elif self.type_ == 'type_2':
-            texture = self.textures['type_2']
+            self._create_texture_type_2(texture)
         else:  # default random grass texture with randomly colored pixels
             for x in range(self.size[0]):
                 for y in range(self.size[1]):
