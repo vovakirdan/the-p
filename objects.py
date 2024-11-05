@@ -47,8 +47,22 @@ def generate_grass_type_2() -> pygame.Surface:
             surface.set_at((x, y), (0, green_shade, 0))
     return surface
 
+def generate_grass_type_3() -> pygame.Surface:
+    surface = pygame.Surface(BLOCK_SIZE)
+    for x in range(surface.get_width()):
+        delim = surface.get_height() // 2 + random.randint(0, 5)
+        for y in range(surface.get_height()):
+            # bg color if y < delim
+            if y < delim:
+                surface.set_at((x, y), configuration.screen.background_color)
+                continue
+            green_shade = random.randint(100, 200)
+            surface.set_at((x, y), (0, green_shade, 0))
+    return surface
+
 grass_type_1 = generate_grass_type_1()
 grass_type_2 = generate_grass_type_2()
+grass_type_3 = generate_grass_type_3()
 
 def generate_earth_type_1() -> pygame.Surface:
     surface = pygame.Surface(BLOCK_SIZE)
@@ -90,7 +104,7 @@ class Gold(Block):
         self.image.fill((255, 215, 0))
 
 textures_dict = {
-    'grass': {'type_1': grass_type_1, 'type_2': grass_type_2},
+    'grass': {'type_1': grass_type_1, 'type_2': grass_type_2, 'type_3': grass_type_3},
     'earth': {'type_1': earth_type_1},
     'water': {'type_1': Water},
     'rock': {'type_1': Rock},
