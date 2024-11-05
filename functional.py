@@ -62,7 +62,7 @@ def generate_world(configuration: Configuration, seed=None):
             if tile_type == 'earth':
                 block = Earth(x_pos, y_pos)
             elif tile_type == 'grass':
-                block = Grass(x_pos, y_pos)
+                block = Grass(x_pos, y_pos, type_=random.choice(['type_1', 'type_2', '']))
             elif tile_type == 'rock':
                 block = Rock(x_pos, y_pos)
             elif tile_type == 'mud':
