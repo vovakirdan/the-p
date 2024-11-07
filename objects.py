@@ -2,8 +2,8 @@ import pygame
 import random
 from typing import AnyStr, Tuple
 
-from configuration import configuration
-from shades import brown_shades
+from configuration import configuration, Color
+from shades import brown_shades, sand_shades, water_shades
 
 BLOCK_SIZE = configuration.block.size
 
@@ -45,14 +45,14 @@ def generate_grass_type_2() -> pygame.Surface:
             surface.set_at((x, y), (0, green_shade, 0))
     return surface
 
-def generate_grass_type_3() -> pygame.Surface:
+def generate_grass_type_3(sky_color: Color = Color(*configuration.screen.background_color)) -> pygame.Surface:
     surface = pygame.Surface(BLOCK_SIZE)
     for x in range(surface.get_width()):
         delim = surface.get_height() // 2 + random.randint(0, 5)
         for y in range(surface.get_height()):
             # bg color if y < delim
             if y < delim:
-                surface.set_at((x, y), configuration.screen.background_color)
+                surface.set_at((x, y), tuple(sky_color))
                 continue
             green_shade = random.randint(100, 200)
             surface.set_at((x, y), (0, green_shade, 0))
@@ -63,6 +63,7 @@ grass_type_2 = generate_grass_type_2()
 grass_type_3 = generate_grass_type_3()
 
 def generate_earth_type_1() -> pygame.Surface:
+    """Default earth"""
     surface = pygame.Surface(BLOCK_SIZE)
     # create an earth texture with brown shades depends on x and y
     for x in range(surface.get_width()):
@@ -71,7 +72,16 @@ def generate_earth_type_1() -> pygame.Surface:
             surface.set_at((x, y), (brown_shade, 42, 42))
     return surface
 
+def generate_sand_type_1() -> pygame.Surface:
+    """Sand"""
+    surface = pygame.Surface(BLOCK_SIZE)
+    for x in range(surface.get_height()):
+        for y in range(surface.get_width()):
+            surface.set_at((x, y), sand_shades[x][y])
+    return surface
+
 earth_type_1 = generate_earth_type_1()
+sand_type_1 = generate_sand_type_1()
 
 class Water(Block):
     def create_texture(self):
@@ -80,6 +90,16 @@ class Water(Block):
             for y in range(self.size[1]):
                 blue_shade = random.randint(100, 200)
                 self.image.set_at((x, y), (0, 0, blue_shade))
+
+def generate_water_type_1() -> pygame.Surface:
+    """water"""
+    surface = pygame.Surface(BLOCK_SIZE)
+    for x in range(surface.get_height()):
+        for y in range(surface.get_width()):
+            surface.set_at((x, y), water_shades[x][y])
+    return surface
+
+water_type_1 = generate_water_type_1()
 
 class Rock(Block):
     def create_texture(self):
@@ -104,7 +124,8 @@ class Gold(Block):
 textures_dict = {
     'grass': {'type_1': grass_type_1, 'type_2': grass_type_2, 'type_3': grass_type_3},
     'earth': {'type_1': earth_type_1},
-    'water': {'type_1': Water},
+    'sand': {'type_1': sand_type_1},
+    'water': {'type_1': water_type_1},
     'rock': {'type_1': Rock},
     'mud': {'type_1': Mud},
     'gold': {'type_1': Gold}
