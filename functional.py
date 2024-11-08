@@ -1,6 +1,6 @@
 import pygame
 import random
-from typing import Literal, Tuple
+from typing import Literal, Tuple, List, Iterable
 
 from objects import Block, textures_dict, generate_grass_type_3
 from configuration import configuration
@@ -9,7 +9,7 @@ def generate_biome(type_: Literal['default', 'ocean', 'forest'] = 'default', bio
     """Generates biome"""
     pass
 
-def generate_world(seed=None):
+def generate_world(seed=None) -> Tuple[Iterable[pygame.sprite.Group], List[str], int]:
     """Generates world"""
     # Set seed
     if seed is None:
