@@ -8,13 +8,17 @@ from shades import brown_shades, sand_shades, water_shades
 BLOCK_SIZE = configuration.block.size
 
 class Block(pygame.sprite.Sprite):
-    def __init__(self, x: int = None, y: int = None, collide: bool = True, type_: AnyStr = '', texture: pygame.Surface = None):
+    def __init__(self, x: int = None, y: int = None, collide: bool = True, type_: AnyStr = '', texture: pygame.Surface = None, color: Color = None):
         super().__init__()
         self.size = configuration.block.size
-        if texture:
-            self.image = texture
-        else:
-            self.image = pygame.Surface(self.size)
+        # if given a color and no given texture, generate a texture and fill with a color
+        if color and not texture:
+            texture = pygame.Surface(BLOCK_SIZE)
+            texture.fill(tuple(color))
+        elif not texture:
+            texture = pygame.Surface(BLOCK_SIZE)
+        self._texture = texture
+        self.image = texture
         self.rect = self.image.get_rect()
         self.rect.topleft = (x, y)
         self.collide: bool = collide
@@ -23,6 +27,9 @@ class Block(pygame.sprite.Sprite):
     @property
     def texture(self) -> pygame.Surface:
         return self._texture
+
+def color_to_texture(color: Color) -> pygame.Surface:
+    return pygame.Surface(BLOCK_SIZE, pygame.SRCALPHA).convert_alpha().fill(tuple(color))
 
 def generate_grass_type_1() -> pygame.Surface:
     surface = pygame.Surface(BLOCK_SIZE)
@@ -74,7 +81,7 @@ def generate_earth_type_1() -> pygame.Surface:
 
 def generate_sand_type_1() -> pygame.Surface:
     """Sand"""
-    surface = pygame.Surface(BLOCK_SIZE)
+    surface = pygame.Surface(BLOCK_SIZE,)
     for x in range(surface.get_height()):
         for y in range(surface.get_width()):
             surface.set_at((x, y), sand_shades[x][y])
@@ -93,7 +100,7 @@ class Water(Block):
 
 def generate_water_type_1() -> pygame.Surface:
     """water"""
-    surface = pygame.Surface(BLOCK_SIZE)
+    surface = pygame.Surface(BLOCK_SIZE, pygame.SRCALPHA)
     for x in range(surface.get_height()):
         for y in range(surface.get_width()):
             surface.set_at((x, y), water_shades[x][y])

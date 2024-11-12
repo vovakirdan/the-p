@@ -6,6 +6,7 @@ class Color:
         self.r = r
         self.g = g
         self.b = b
+        self.tuple = (self.r, self.g, self.b)
 
     def rand(self):
         self.r, self.g, self.b = random.randint(0, 255), random.randint(0, 255), random.randint(0, 255)
@@ -14,6 +15,11 @@ class Color:
         yield self.r
         yield self.g
         yield self.b
+
+    def __getitem__(self, item: int):
+        if isinstance(item, int):
+            return self.tuple[item]
+        return 
 
 BROWN = Color(162, 101, 62)
 SKY = Color(127, 199, 255)
@@ -75,6 +81,7 @@ class World:
         self.width = 8000
         self.height = 4000
         self.size = (self.width, self.height)
+        self.ground_level = self.height // 4
 
 class Configuration:
     BLOCK_COEFFICIENT = 20
