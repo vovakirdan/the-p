@@ -36,13 +36,14 @@ def _generate_ocean_biome(
     # generate biome from top to the bottom
     while x < biom_size:
         ground_level = int(ground_level + increase_gr_lev_coeff)
-        for y in range(0, water_level + 1):
+        chosen_sky_color = sky_gradient[x]
+        for y in range(0, (configuration.world.height - water_level)):
             # generate sky
-            block_list.add(Block(x, y, collide=False, color=sky_gradient[x]))  # todo cache it to increase performance
-        for y in range(water_level + 1, ground_level):
+            block_list.add(Block(x, y, collide=False, color=chosen_sky_color))  # todo cache it to increase performance
+        for y in range((configuration.world.height - water_level + 1), (configuration.world.height - start_ground_level)):
             # generate water
             block_list.add(Block(x, y, texture=textures_dict['water']['type_1']))
-        for y in range(ground_level + 1, configuration.world.height):
+        for y in range((configuration.world.height - start_ground_level + 1), configuration.world.height):
             # generate sand
             block_list.add(Block(x, y, texture=textures_dict['sand']['type_1']))
         x += 1
